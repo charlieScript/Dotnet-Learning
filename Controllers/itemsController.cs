@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
 using Catalog.Entities;
 using Catalog.Repositories;
@@ -96,6 +97,22 @@ namespace Catalog.Controllers
       };
 
       repository.UpdateItem(updatedItem);
+
+      return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public ActionResult DeleteItem(Guid id)
+    {
+      var existingItem = repository.GetItem(id);
+      var error = Convert.ToString(existingItem);
+      _logger.LogError(error);
+      if (existingItem is null)
+      {
+        return NotFound();
+      }
+
+      repository.DeleteItem(id);
 
       return NoContent();
     }
